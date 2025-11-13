@@ -7,6 +7,8 @@ and robust error handling using a global ErrorBoundary with a custom 404 robot i
 ---
 
 ## 🌙 Preview
+![메인 페이지](./public/images/total_image.png)
+
 
 ### **Global ErrorBoundary Screen**
 When an unexpected error occurs, the system displays a custom robot illustration:
