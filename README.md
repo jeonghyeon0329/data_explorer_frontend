@@ -1,70 +1,82 @@
-# Getting Started with Create React App
+# 🚀 Data Explorer — Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern, dark-themed React frontend built for login-based data services.  
+This project provides a clean authentication flow, beautiful UI animations,  
+and robust error handling using a global ErrorBoundary with a custom 404 robot illustration.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🌙 Preview
 
-### `npm start`
+### **Global ErrorBoundary Screen**
+When an unexpected error occurs, the system displays a custom robot illustration:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+<p align="center">
+  <img src="./src/assets/error_robot_404.png" width="280px" alt="Error Robot"/>
+</p>
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## 🔧 Tech Stack
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+| Category | Technology |
+|---------|------------|
+| Framework | **React 18** |
+| Routing | **React Router v6 (HashRouter)** |
+| Styling | **Tailwind CSS** |
+| State | React Hooks |
+| HTTP | Custom Fetch/Axios APIs |
+| Error Handling | Custom **ErrorBoundary** |
+| Notification | Optional: react-toastify |
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🎨 UI Features
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 🌑 **Dark Themed UI**
+- Full dark-mode design using Tailwind utility classes
+- Smooth fade-in animations on all pages
+- Clean and distraction-free layout
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 🔐 **Authentication Pages**
+- Login page
+- Sign up page
+- Forgot password page (API integrated)
+- All pages centered and responsive
 
-### `npm run eject`
+### ⚠️ **Global ErrorBoundary**
+- Displays a custom “broken robot” 404/500 illustration
+- Hover → “Go Home” text appears smoothly
+- Clicking the robot sends the user back to `/main`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 🛠 Environment Versions
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+이 프로젝트는 아래 환경에서 개발 및 테스트되었습니다.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+| Component | Version |
+|----------|---------|
+| **Node.js** | 22.16.0 |
 
-## Learn More
+### ⚙️ Recommended Development Stack
+- **VSCode + Tailwind IntelliSense 플러그인**
+- Browers: Chrome 최신 버전 (권장)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 📂 Node / npm 버전 확인 방법
 
-### Code Splitting
+```bash
+node -v
+npm -v
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## libray version & install
+```bash
+npm install react-router-dom react-toastify
+"react-router-dom": "^7.9.5",
+"react-toastify": "^11.0.5",
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+npm install -D tailwindcss@3 postcss autoprefixer
+```
