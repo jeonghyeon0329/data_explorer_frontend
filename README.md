@@ -14,7 +14,7 @@ and robust error handling using a global ErrorBoundary with a custom 404 robot i
 When an unexpected error occurs, the system displays a custom robot illustration:
 
 <p align="center">
-  <img src="./src/assets/error_robot_404.png" width="280px" alt="Error Robot"/>
+  <img src="./public/images/error-occured.png" width="280px" alt="Error Robot"/>
 </p>
 
 ---
