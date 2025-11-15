@@ -14,13 +14,48 @@ function SignupPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  const handleSignup = async () => {
+  const validateUsername = (v) => {
+    if (v.length < 4) return "Username must be at least 4 characters.";
+    if (!/^[A-Za-z0-9_]+$/.test(v))
+      return "Only letters, numbers, and underscores (_) are allowed.";
+    return "";
+  };
+
+  const validateEmail = (v) => {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v))
+      return "Please enter a valid email address.";
+    return "";
+  };
+
+  const validatePassword = (v) => {
+    if (v.length < 8) return "Password must be at least 8 characters.";
+    if (/^\d+$/.test(v)) return "Password cannot be numbers only.";
+    return "";
+  };
+
+  const handleSignup = async (e) => {
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const uErr = validateUsername(username);
+    const eErr = validateEmail(email);
+    const pErr = validatePassword(password);
+
+    if (uErr || eErr || pErr) {
+      if (uErr) setErrorMessage(uErr);
+      else if (eErr) setErrorMessage(eErr);
+      else if (pErr) setErrorMessage(pErr);
+
+      return;
+    }
+
     setIsLoading(true);
     setErrorMessage("");
     setSuccessMessage("");
 
     try {
-      const data = await signup(username, name, email, password);
+      await signup(username, name, email, password);
 
       setSuccessMessage("Account created successfully!");
       setTimeout(() => navigate("/login"), 900);
@@ -94,7 +129,11 @@ function SignupPage() {
               transition
             "
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => {
+                setUsername(e.target.value)
+                setErrorMessage(validateUsername(e.target.value));
+              }
+            }
           />
         </div>
 
@@ -130,7 +169,10 @@ function SignupPage() {
               transition
             "
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setErrorMessage(validateEmail(e.target.value));
+            }}
           />
         </div>
 
@@ -148,7 +190,10 @@ function SignupPage() {
               transition
             "
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setErrorMessage(validatePassword(e.target.value));
+            }}
           />
         </div>
 

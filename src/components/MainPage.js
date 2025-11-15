@@ -46,7 +46,7 @@ function MainPage() {
             transition-colors
           "
         >
-          Enter
+          Log in
         </button>
 
         {/* 아래쪽 작은 문구 */}

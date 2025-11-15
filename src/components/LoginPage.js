@@ -10,7 +10,8 @@ function LoginPage() {
 
   const handleLogin = () => {
     console.log("login", username, password);
-    navigate("/main", { replace: true });
+    // navigate("/main", { replace: true });
+    alert("login success")
   };
 
   return (

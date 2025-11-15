@@ -6,23 +6,46 @@ function ForgotPasswordPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  const handleReset = async () => {
+  const validateEmail = (v) => {
+    if (!v.trim())
+      return "Please enter a valid email address.";
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v))
+      return "Please enter a valid email address.";
+    return "";
+  };
+
+  const handleReset = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const eErr = validateEmail(email);
+
+    if (eErr) {
+      if (eErr) setErrorMessage(eErr);
+      return;
+    }
+
     setIsLoading(true);
+    setErrorMessage("");
     setSuccessMessage("");
 
     try {
       await reset_password(email);
+      setSuccessMessage("Check your email for a password reset link.");
+      // setTimeout(() => navigate("/login"), 900);
+
+      setEmail("");
 
     } catch (error) {
-      setEmail("");
+      setErrorMessage(
+        error?.data?.detail || "Password-reset failed. Please try again."
+      );
 
     } finally {
-      setSuccessMessage("Check your email for a password reset link.");
-      setTimeout(() => navigate("/login"), 900);
-
-      setEmail("");
       setIsLoading(false);
     }
   };
@@ -37,6 +60,14 @@ function ForgotPasswordPage() {
       <h1 className="text-3xl font-bold mb-2 tracking-wide">Reset Password</h1>
       <p className="text-gray-400 mb-10 text-sm">Enter your email</p>
 
+      {/* Error or Success Message */}
+      {errorMessage && (
+        <div
+          className="mb-4 text-red-400 text-sm text-center animate-[fadeIn_0.3s_ease]"
+        >
+          {errorMessage}
+        </div>
+      )}
       {successMessage && (
         <div
           className="mb-4 text-green-400 text-sm text-center animate-[fadeIn_0.3s_ease]"
