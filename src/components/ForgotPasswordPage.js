@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { reset_password } from "../api/auth";
+import { forgot_password } from "../api/auth";
 
 function ForgotPasswordPage() {
   const navigate = useNavigate();
@@ -34,10 +34,9 @@ function ForgotPasswordPage() {
     setSuccessMessage("");
 
     try {
-      await reset_password(email);
+      await forgot_password(email);
       setSuccessMessage("Check your email for a password reset link.");
-      // setTimeout(() => navigate("/login"), 900);
-
+      setTimeout(() => navigate("/login"), 900);
       setEmail("");
 
     } catch (error) {
