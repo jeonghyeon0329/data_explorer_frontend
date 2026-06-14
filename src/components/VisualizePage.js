@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getDataset } from '../api/datasets';
@@ -56,21 +56,17 @@ function VisualizePage() {
 
   useEffect(() => { fetchCharts(); }, [fetchCharts]);
 
-  const buildConfig = () => ({
-    aggregation: agg,
-    color,
-    ...(chartType === 'histogram' ? { bins } : {}),
-  });
+  const previewTimerRef = useRef(null);
 
-  const handlePreview = async () => {
-    if (!title) { toast.error('Enter a chart title'); return; }
+  const runPreview = useCallback(async () => {
+    if (!yCol) return;
+    if (chartType !== 'histogram' && !xCol) return;
     setPreviewing(true);
     try {
-      /* create temp → get data → delete */
       const created = await createChart(id, {
-        title, chart_type: chartType,
+        title: title || 'Preview', chart_type: chartType,
         x_column: xCol || null, y_column: yCol || null,
-        config: buildConfig(),
+        config: { aggregation: agg, color, ...(chartType === 'histogram' ? { bins } : {}) },
       });
       const chartId = created.data.chart_id;
       const dataRes = await getChartData(id, chartId);
@@ -81,7 +77,15 @@ function VisualizePage() {
     } finally {
       setPreviewing(false);
     }
-  };
+  }, [id, title, chartType, xCol, yCol, agg, color, bins]);
+
+  useEffect(() => {
+    if (!yCol) return;
+    if (chartType !== 'histogram' && !xCol) return;
+    if (previewTimerRef.current) clearTimeout(previewTimerRef.current);
+    previewTimerRef.current = setTimeout(runPreview, 600);
+    return () => clearTimeout(previewTimerRef.current);
+  }, [chartType, xCol, yCol, agg, color, bins, title, runPreview]);
 
   const handleSave = async () => {
     if (!title) { toast.error('Enter a chart title'); return; }
@@ -90,7 +94,7 @@ function VisualizePage() {
       await createChart(id, {
         title, chart_type: chartType,
         x_column: xCol || null, y_column: yCol || null,
-        config: buildConfig(),
+        config: { aggregation: agg, color, ...(chartType === 'histogram' ? { bins } : {}) },
       });
       toast.success('Chart saved');
       fetchCharts();
@@ -232,28 +236,25 @@ function VisualizePage() {
               </div>
             </div>
 
-            {/* Actions */}
-            <div className="flex gap-3 pt-2">
-              <button onClick={handlePreview} disabled={previewing}
-                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-gray-700 hover:border-gray-500 text-gray-300 text-sm transition disabled:opacity-50">
-                {previewing ? <Spinner size="sm" /> : '👁'}  Preview
-              </button>
-              <button onClick={handleSave} disabled={saving}
-                className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition disabled:opacity-50">
-                {saving ? <Spinner size="sm" /> : '💾'}  Save
-              </button>
-            </div>
+            {/* Save */}
+            <button onClick={handleSave} disabled={saving}
+              className="mt-auto flex items-center justify-center gap-2 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition disabled:opacity-50">
+              {saving ? <Spinner size="sm" /> : null} Save Chart
+            </button>
           </div>
 
           {/* Preview panel */}
           <div className="bg-[#18181b] border border-gray-800 rounded-2xl p-6 flex flex-col gap-3">
-            <h2 className="text-white font-semibold">{previewData?.title || 'Preview'}</h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-white font-semibold">{previewData?.title || 'Preview'}</h2>
+              {previewing && <Spinner size="sm" />}
+            </div>
             {previewData ? (
               <ChartRenderer chartData={previewData} height={340} />
             ) : (
               <div className="flex-1 flex flex-col items-center justify-center text-gray-600 py-16 gap-2">
                 <p className="text-4xl">📊</p>
-                <p className="text-sm">Configure and click Preview</p>
+                <p className="text-sm">{previewing ? 'Loading…' : 'Title과 Column을 선택하면 자동으로 표시됩니다'}</p>
               </div>
             )}
           </div>

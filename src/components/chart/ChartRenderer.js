@@ -18,7 +18,10 @@ const axisProps = { stroke: '#4b5563', tick: { fill: '#9ca3af', fontSize: 11 } }
 function ChartRenderer({ chartData, height = 320 }) {
   if (!chartData) return null;
 
-  const { chart_type, labels = [], series = [] } = chartData;
+  const { chart_type, labels = [], series = [], config = {} } = chartData;
+  const effectivePalette = config.color
+    ? [config.color, ...PALETTE.filter((c) => c !== config.color)]
+    : PALETTE;
 
   /* bar / histogram */
   if (chart_type === 'bar' || chart_type === 'histogram') {
@@ -35,7 +38,7 @@ function ChartRenderer({ chartData, height = 320 }) {
           <Tooltip {...tooltipStyle} />
           <Legend wrapperStyle={{ color: '#9ca3af', fontSize: 12 }} />
           {series.map((s, i) => (
-            <Bar key={s.name} dataKey={s.name} fill={PALETTE[i % PALETTE.length]} radius={[3, 3, 0, 0]} />
+            <Bar key={s.name} dataKey={s.name} fill={effectivePalette[i % effectivePalette.length]} radius={[3, 3, 0, 0]} />
           ))}
         </BarChart>
       </ResponsiveContainer>
@@ -58,7 +61,7 @@ function ChartRenderer({ chartData, height = 320 }) {
           <Legend wrapperStyle={{ color: '#9ca3af', fontSize: 12 }} />
           {series.map((s, i) => (
             <Line key={s.name} type="monotone" dataKey={s.name}
-              stroke={PALETTE[i % PALETTE.length]} strokeWidth={2} dot={false} />
+              stroke={effectivePalette[i % effectivePalette.length]} strokeWidth={2} dot={false} />
           ))}
         </LineChart>
       </ResponsiveContainer>
@@ -74,7 +77,7 @@ function ChartRenderer({ chartData, height = 320 }) {
             cx="50%" cy="50%" outerRadius={height / 3}
             label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
             labelLine={false}>
-            {series.map((_, i) => <Cell key={i} fill={PALETTE[i % PALETTE.length]} />)}
+            {series.map((_, i) => <Cell key={i} fill={effectivePalette[i % effectivePalette.length]} />)}
           </Pie>
           <Tooltip {...tooltipStyle} />
           <Legend wrapperStyle={{ color: '#9ca3af', fontSize: 12 }} />
@@ -93,7 +96,7 @@ function ChartRenderer({ chartData, height = 320 }) {
           <XAxis dataKey="x" name={chartData.x_column} {...axisProps} />
           <YAxis dataKey="y" name={chartData.y_column} {...axisProps} />
           <Tooltip cursor={{ strokeDasharray: '3 3' }} {...tooltipStyle} />
-          <Scatter name={s.name} data={s.data || []} fill={PALETTE[0]} />
+          <Scatter name={s.name} data={s.data || []} fill={effectivePalette[0]} />
         </ScatterChart>
       </ResponsiveContainer>
     );

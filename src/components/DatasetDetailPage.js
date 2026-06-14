@@ -7,7 +7,15 @@ import Badge from './common/Badge';
 import DataTable from './common/DataTable';
 import Spinner from './common/Spinner';
 
-const OPS = ['eq', 'ne', 'contains', 'gt', 'lt', 'gte', 'lte'];
+const OPS = [
+  { value: 'eq',       label: '= 같음' },
+  { value: 'ne',       label: '≠ 다름' },
+  { value: 'contains', label: '포함' },
+  { value: 'gt',       label: '> 초과' },
+  { value: 'lt',       label: '< 미만' },
+  { value: 'gte',      label: '≥ 이상' },
+  { value: 'lte',      label: '≤ 이하' },
+];
 
 function DatasetDetailPage() {
   const { id } = useParams();
@@ -196,7 +204,7 @@ function DatasetDetailPage() {
                 onChange={(e) => setFilterOp(e.target.value)}
                 className="px-3 py-2 rounded-lg bg-[#18181b] border border-gray-800 text-sm text-gray-300 outline-none"
               >
-                {OPS.map((op) => <option key={op} value={op}>{op}</option>)}
+                {OPS.map((op) => <option key={op.value} value={op.value}>{op.label}</option>)}
               </select>
               <input
                 value={filterVal}
@@ -217,7 +225,7 @@ function DatasetDetailPage() {
               )}
               {activeFilter && (
                 <span className="text-xs text-blue-400 bg-blue-950 px-2 py-1 rounded-lg">
-                  {activeFilter.col} {activeFilter.op} "{activeFilter.val}"
+                  {activeFilter.col} {OPS.find((o) => o.value === activeFilter.op)?.label} "{activeFilter.val}"
                 </span>
               )}
             </div>
