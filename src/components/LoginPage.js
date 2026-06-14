@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../api/auth";
+import { useAuth } from "../context/AuthContext";
 
 function LoginPage() {
   const navigate = useNavigate();
+  const auth = useAuth();
   const [username, setusername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -43,16 +45,20 @@ function LoginPage() {
     setSuccessMessage("");
 
     try {
-      await login(username, password);
+      const result = await login(username, password);
+      const { access_token, user_id, username: uname, role } = result?.data || {};
+      if (access_token) {
+        auth.login(access_token, { id: user_id, username: uname, role });
+      }
 
       setSuccessMessage("Hello! Login successfully!!");
-      setTimeout(() => navigate("/main"), 900);
+      setTimeout(() => navigate("/dashboard"), 900);
       setusername("");
       setPassword("");
 
     } catch (error) {
       setErrorMessage(
-        error?.data?.detail || "Login fail."
+        error?.data?.message || "Login fail."
       );
     } finally {
       setIsLoading(false);
@@ -105,7 +111,7 @@ function LoginPage() {
         <div className="mb-5">
           <label className="text-sm text-gray-400">AccountID</label>
           <input
-            type="email"
+            type="text"
             placeholder="Enter your Account ID"
             className="
               w-full mt-2 px-4 py-2 rounded-lg

@@ -41,7 +41,7 @@ function ForgotPasswordPage() {
 
     } catch (error) {
       setErrorMessage(
-        error?.data?.detail || "Password-reset failed. Please try again."
+        error?.data?.message || "Password-reset failed. Please try again."
       );
 
     } finally {

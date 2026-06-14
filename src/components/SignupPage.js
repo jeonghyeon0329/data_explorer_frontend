@@ -67,7 +67,7 @@ function SignupPage() {
       
     } catch (error) {
       setErrorMessage(
-        error?.data?.detail || "Signup failed. Please try again."
+        error?.data?.message || "Signup failed. Please try again."
       );
     } finally {
       setIsLoading(false);
